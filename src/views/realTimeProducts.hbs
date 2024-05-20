@@ -5,7 +5,7 @@
             {{#each products}}
             <div class="rtproduct">
                 <h3>{{this.title}}</h3>
-                <p>Id: {{this.id}}</p>
+                <p>Id: {{this._id}}</p>
                 <p>Precio: ${{this.price}}</p>
                 <p>Stock: {{this.stock}}</p>
             </div>
@@ -19,19 +19,20 @@
             <input type="number" placeholder="Ingrese el precio" id="price" name="price" required>
             <input type="text" placeholder="Ingrese código" id="code" name="code" required>
             <input type="number" placeholder="Ingrese stock" id="stock" name="stock" required>
-            <input placeholder="Agregue una descripción" id="description" name="description" required></input>
+            <input type="text" placeholder="Ingrese thumbnails" id="thumbnails" name="thumbnails" required>
+            <input type="text" placeholder="Agregue una descripción" id="description" name="description" required></input>
             </div>
             <div class="submit">
                 <button type="submit" onclick="event" id="botonAgregar">Agregar producto</button>
             </div>
             </form>
-            <form>
+            <form method="delete" id="deleteForm" action="http://localhost:8080/api/products/">
                 <h1>Borrar Producto:</h1>
                 <div class="form-input">
-                    <input type="number" placeholder="Ingrese el id" id="id" name="id" required>
+                    <input type="text" placeholder="Ingrese el id" id="pid" name="pid" required>
                 </div>
                 <div class="submit">
-                    <button type="submit" onclick="" id="delete">Borrar producto</button>
+                    <button type="submit" onclick="event" id="delete">Borrar producto</button>
                 </div>
 
             </form>

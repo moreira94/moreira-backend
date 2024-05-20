@@ -11,12 +11,16 @@ h1 {
 
 .product {
     border-style: double;
+    border-radius: 2%;
     border-width: thick;
     border-color: maroon;
     margin: 5px;
     padding-left: 8px;
     padding-right: 3px;
     width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 a {
     text-decoration: none;
@@ -25,6 +29,8 @@ a {
 
 h3 {
     margin: 2px;
+    display: flex;
+    justify-content: center;
 }
 
 .rtproduct {
@@ -54,6 +60,12 @@ button {
     height: 30px;
     width: 180px;
 }
+.addCart-button {
+    display: flex;
+    justify-content: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
 
 .form {
     display: flex;
@@ -69,10 +81,20 @@ p {
     margin-top: 0;
     margin-bottom: 0;
     margin-right: 6px;
+    display: flex;
+    justify-content: center;
 }
 
 .product-container {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+}
+.pagNumero {
+    padding-right: 10px;
+    padding-left: 10px;
 }

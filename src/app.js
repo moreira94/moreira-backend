@@ -5,9 +5,8 @@ import viewsRouter from './routes/view.router.js';
 import { __dirname, uploader } from './utils.js';
 import handlebars from 'express-handlebars';
 import { Server } from 'socket.io';
-import mongoose from 'mongoose';
-
 import ProductManagerMongo from './Dao/productManagerMongo.js';
+import connectDB from './config/index.js';
 
 const app = express();
 const PORT = process.env.PORT || 8080
@@ -21,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
-mongoose.connect('mongodb+srv://moreirajuliangustavo:superyo94@backend.flriqtn.mongodb.net/?retryWrites=true&w=majority&appName=Backend');
+connectDB()
 
 console.log('Base de datos conectada');
 

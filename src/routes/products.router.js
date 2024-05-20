@@ -5,8 +5,13 @@ const router = new Router();
 let productManager = new ProductManagerMongo();
 
 router.get('/', async (req, res) => {
+    try {
+
     let products = await productManager.getProducts();
-    res.send(products);
+    res.send({status: 'success', payload: products})}
+    catch (error) {
+        res.send(console.log(error));
+    }
 });
 
 router.post('/', async (req, res) => {

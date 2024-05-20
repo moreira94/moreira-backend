@@ -7,9 +7,9 @@ export default class ProductManagerMongo {
   }
 
 
-  getProducts = async () => {
+  getProducts = async ({limit = 10, numPage=1}) => {
     try {
-      const products = await productModel.find({}).lean();
+      const products = await productModel.paginate({}, {limit, page: numPage, lean: true});
       return products;
     }
     catch (err) {
@@ -18,7 +18,7 @@ export default class ProductManagerMongo {
     }
   };
 
-  addProduct = async ({ title, price, code, stock, description, category, thumbnails }) => {
+  addProduct = async ({ title, price, code, stock, description, thumbnails, category  }) => {
     let productStatus = true;
     const newProduct = {
       title,
@@ -27,9 +27,10 @@ export default class ProductManagerMongo {
       price,
       status: productStatus,
       stock,
-      category,
-      thumbnails
+      category: category || "Mobiliario",
+      thumbnails, 
     }
+    console.log(newProduct);
     if (!title || !price || !code || !stock || !description || !thumbnails  ) {
       return await console.log("Asegurate de incluir todas las propiedades en el objeto!");
     }
@@ -45,7 +46,7 @@ export default class ProductManagerMongo {
   
    getProductsById = async(pid) => {
       try {
-        let productById = await productModel.findById(pid)
+        let productById = await productModel.findById({ _id: pid })
         return productById
       } 
       catch {

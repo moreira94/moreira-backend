@@ -1,7 +1,6 @@
 import {connect} from 'mongoose';
 
 const connectDB = ()  => {
-    connect('mongodb://127.0.0.1:27017')
-}
+    connect('mongodb+srv://moreirajuliangustavo:superyo94@backend.flriqtn.mongodb.net/Ecommerce?retryWrites=true&w=majority&appName=Backend');}
 
 export default connectDB;

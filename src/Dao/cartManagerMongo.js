@@ -2,7 +2,7 @@ import { cartsModel } from "./models/carts.models.js";
 
 export default class CartManagerMongo {
     constructor() {
-      this.carts = [];
+      this.model = cartsModel;
       
     }
 
