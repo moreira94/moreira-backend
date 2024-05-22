@@ -35,7 +35,8 @@ router.delete("/:cid", async (req, res) => {
     const { cid } = req.params;
     const result = await cartManager.resetCart({_id: cid})
     res.send({status:"succes", payload: result})
-  } catch {
+  } catch(err) {
+    console.log(err);
     res.status(400).send("No se pudieron eliminar los productos del carrito")
   }
 })
@@ -48,7 +49,8 @@ router.post("/:cid/products/:pid", async (req, res) => {
     const product = await productManager.getProductsById(pid);
     const cartProduct = await cartManager.addProductToCart(cart, product);
     res.status(200).send(cartProduct);
-      } catch {
+      } catch(err) {
+        console.log(err);
           res.status(400).send("No se pudo agregar el producto al carrito")
         }
 });
@@ -56,9 +58,27 @@ router.post("/:cid/products/:pid", async (req, res) => {
 router.delete("/:cid/products/:pid", async (req, res) => {
   try {
     const { cid, pid } = req.params;
+    // const cart = await cartManager.getCartById(cid);
+    // const product = await productManager.getProductsById(pid);
+    const cartProduct = await cartManager.deleteProductFromCart(cid, pid);
+    console.log(cartProduct);
+    res.status(200).send(cartProduct);
+    } catch(err) {
+      console.log(err);
+      res.status(400).send("No se pudo eliminar el producto del carrito")
+      }
+
+
+});
+
+router.put("/:cid/products/:pid", async (req, res) => {
+  try {
+    const { cid, pid } = req.params;
+    const cantidad = req.body;
     const cart = await cartManager.getCartById(cid);
     const product = await productManager.getProductsById(pid);
     const cartProduct = await cartManager.deleteProductFromCart(cart, product);
+
     res.status(200).send(cartProduct);
     } catch {
       res.status(400).send("No se pudo eliminar el producto del carrito")
