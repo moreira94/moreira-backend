@@ -9,8 +9,9 @@
                 <p>Precio: ${{this.price}}</p>
                 <p>Stock: {{this.stock}}</p>
                 <p>Código del producto: {{this.code}}</p>
+                <p id="product-id">{{this._id}}</p>
                 <div class="addCart-button">
-                    <button>Agregar al carrito</button>
+                    <button class="add-to-cart" id="add-to-cart">Agregar al carrito</button>
                 </div>
                 <hr>
             </div>
@@ -24,7 +25,7 @@
             <a href="/products?numPage={{prevPage}}">Anterior</a>
             {{/if}}
             <label class="pagNumero">Pag:{{page}}</label>
-  
+
             {{#if hasNextPage}}
             <a href="/products?numPage={{nextPage}}">Siguiente</a>
             {{/if}}
@@ -33,3 +34,6 @@
     </div>
 
 </main>
+
+<script src="/src/public/js/cart.js"></script>
+

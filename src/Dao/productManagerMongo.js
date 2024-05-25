@@ -7,9 +7,9 @@ export default class ProductManagerMongo {
   }
 
 
-  getProducts = async ({limit = 10, numPage=1} ) => {
+  getProducts = async (limit = 10, numPage=1, sort ) => {
     try {
-      const products = await productModel.paginate({}, {limit, page: numPage,  lean: true});
+      const products = await productModel.paginate({}, {limit: limit, page: numPage, sort: sort,  lean: true});
       return products;
     }
     catch (err) {

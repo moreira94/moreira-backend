@@ -30,12 +30,27 @@ export default class CartManagerMongo {
         return result;
     };
 
+    // getCartById = async (cid) => {
+    //     try {
+    //         let cartsById = await cartsModel.findById(cid)
+    //         return cartsById
+    //     } catch {
+    //         return console.log(`El cart con el id ${cid} no existe`)
+    //     }
+    // };
+
     getCartById = async (cid) => {
         try {
-            let cartsById = await cartsModel.findById(cid)
-            return cartsById
+            let cartsById = await cartsModel.findById(cid);
+            const products = cartsById.products.map((product) => {
+                return {
+                    _id: product._id,
+                    quantity: product.quantity, 
+                };
+            });
+            return { products };
         } catch {
-            return console.log(`El cart con el id ${cid} no existe`)
+            return console.log(`El cart con el id ${cid} no existe`);
         }
     };
 
@@ -62,16 +77,28 @@ export default class CartManagerMongo {
     //     )
     //     return newProductInCart;
     // }
-    // updateCart = async(cid, pid) => {
-    //     const product = await cartManager.getCartById(cid);
-    //     const productToUpdate = product.products.find(p => p.product.toString() === pid);
+    updateCart = async(cid, pid, productCant) => {
+        const cantidad = parseInt(productCant.quantity);
+        console.log(cantidad);
+        console.log(pid);
+        const cart = await cartsModel.findById(cid);
+        if (!cart) {
+            return console.log('El carrito no existe');
+        }
+        const productInCart = cart.products.find(product => product._id.toString() === pid._id.toString());
+        if (productInCart) {
+            productInCart.quantity = cantidad;
+            const result = await cart.save();
+            return result;
+        }
+                }
+
+    //     const cart = cid;
+    //     const productToUpdate = cart.products.find(p => p._id.toString() === pid);
     //     if (productToUpdate) {
-    //       productToUpdate.quantity += 1;
+    //       productToUpdate = productCant;
     //       const result = await product.save();
     //       return result;
-    //     } else {
-    //       const newProductInCart = await cartManager.addProductToCart(cid, pid);
-    //       return newProductInCart;
     //     }
     //   }
 
@@ -87,7 +114,7 @@ export default class CartManagerMongo {
             return result;
         } else {
             const newProductInCart = {
-                _id: pid,
+                pid,
                 quantity: 1
             }
             cart.products.push(newProductInCart);
@@ -112,12 +139,8 @@ export default class CartManagerMongo {
                 return result;
                 }
 
-        
-        // let result = await cartsModel.findOneAndUpdate(
-        //     { _id: cid },
-        //     { $pull: { products: { product: pid } } },
-        //     { new: true })
-        // return result;
     }
 
 }
+
+

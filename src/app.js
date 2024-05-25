@@ -1,12 +1,17 @@
 import express from 'express';
 import productsRouter from './routes/products.router.js';
 import cartRouter from './routes/cart.router.js';
+import sessionRouter from './routes/session.router.js';
 import viewsRouter from './routes/view.router.js';
 import { __dirname, uploader } from './utils.js';
 import handlebars from 'express-handlebars';
 import { Server } from 'socket.io';
 import ProductManagerMongo from './Dao/productManagerMongo.js';
 import connectDB from './config/index.js';
+import cookieParser from 'cookie-parser';
+import session from 'express-session'
+import FileStore from 'session-file-store'
+
 
 const app = express();
 const PORT = process.env.PORT || 8080
@@ -19,6 +24,12 @@ const httpServer = app.listen(PORT, err => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
+app.use(cookieParser());
+app.use(session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
+}))
 
 connectDB()
 
@@ -32,7 +43,7 @@ io.on('connection', (socket) => {
 
     socket.on('addProduct', async (data) => {
         await productManager.addProduct(data);
-        const products = await productManager.getProducts();
+        const products = await productManager.getProducts(); 
         io.emit('update-products', products);
     });
 
@@ -64,6 +75,9 @@ app.use('/', viewsRouter);
 app.use('/api/products', productsRouter);
 
 app.use('/api/cart', cartRouter);
+
+app.use('/api/session', sessionRouter);
+
 
 let messages = []
 io.on('connection', socket => {

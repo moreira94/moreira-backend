@@ -1,9 +1,11 @@
 import { Router } from "express";
 import ProductManagerMongo from "../Dao/productManagerMongo.js";
+import CartManagerMongo from "../Dao/cartManagerMongo.js";
 
 const router = Router();
 
 let productManager = new ProductManagerMongo();
+let cartManager = new CartManagerMongo()
 
 router.get('/', async (req, res) => {
 
@@ -12,9 +14,9 @@ router.get('/', async (req, res) => {
 }); 
 
 router.get('/products', async (req, res) => {
-    const {numPage, limit} = req.query;
-    const { docs, page, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages, totalDocs } = await productManager.getProducts({limit, numPage })
-    const cantProducts = totalDocs
+    const {limit, numPage} = req.query;
+    const { docs, page, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages, totalDocs } = await productManager.getProducts(limit, numPage )
+    const cantProducts = totalDocso99
     res.render('products', {
         products: docs, 
         page,
@@ -27,6 +29,20 @@ router.get('/products', async (req, res) => {
         numPage
     } )
 })
+
+router.get('/carts/:cid', async (req, res) => {
+    try {
+    const { cid } = req.params;
+    const cart = await cartManager.getCartById(cid);
+    const products = cart.products;
+    console.log(products);
+    res.render('cart', {products: products})
+}
+catch (error) { 
+    console.log(error);
+    res.render('error', {error})
+
+}})
 
 router.get('/realtimeproducts', async (req, res) => {
     const products = await productManager.getProducts()

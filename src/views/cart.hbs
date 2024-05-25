@@ -1,0 +1,14 @@
+<main>
+    <div>
+        <div class="product-container">
+            {{#each products}}
+            <div class="product">
+                <h3>{{this._id}}</h3>
+                <p>Cantidad: {{this.quantity}}</p>
+                <hr>
+            </div>
+            {{/each}}
+
+        </div>
+
+</main>

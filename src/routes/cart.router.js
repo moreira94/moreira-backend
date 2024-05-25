@@ -47,7 +47,7 @@ router.post("/:cid/products/:pid", async (req, res) => {
     const { cid, pid } = req.params;
     const cart = await cartManager.getCartById(cid);
     const product = await productManager.getProductsById(pid);
-    const cartProduct = await cartManager.addProductToCart(cart, product);
+    const cartProduct = await cartManager.addProductToCart(cid, product);
     res.status(200).send(cartProduct);
       } catch(err) {
         console.log(err);
@@ -77,11 +77,12 @@ router.put("/:cid/products/:pid", async (req, res) => {
     const cantidad = req.body;
     const cart = await cartManager.getCartById(cid);
     const product = await productManager.getProductsById(pid);
-    const cartProduct = await cartManager.deleteProductFromCart(cart, product);
-
+    const cartProduct = await cartManager.updateCart(cart, product, cantidad);
+    console.log(cartProduct);
     res.status(200).send(cartProduct);
-    } catch {
-      res.status(400).send("No se pudo eliminar el producto del carrito")
+    } catch(err) {
+      console.log(err);
+      res.status(400).send("No se pudo actualizar el producto del carrito")
       }
 
 
