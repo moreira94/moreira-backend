@@ -1,5 +1,5 @@
 body {
-    background-color: gray;
+    background-color: rgb(149, 149, 149);
 }
 
 h1 {
@@ -25,6 +25,9 @@ h1 {
 a {
     text-decoration: none;
     color: black;
+    margin-left: 5px;
+    margin-right: 5px;
+
 }
 
 h3 {
@@ -55,6 +58,7 @@ input {
     margin: 10px;
 }
 button {
+    margin-top: 10px;
     border: solid;
     border-color: maroon;
     height: 30px;
@@ -67,9 +71,10 @@ button {
     padding-bottom: 5px;
 }
 
-.form {
+form {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .form-input {
@@ -93,8 +98,40 @@ p {
 .pagination {
     display: flex;
     justify-content: center;
+    
 }
 .pagNumero {
     padding-right: 10px;
     padding-left: 10px;
+}
+
+.logout {
+    margin-top: 20px;
+    padding: 3px;
+    background-color: red;
+    border: 3px solid;
+    border-radius: 15%;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+.register{
+    color: green;
+    display: flex;  
+    justify-content: center;
+    font-size: 30px;
+}
+
+.formulario-login {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 10px;
+    margin-bottom: 10px;
+
 }

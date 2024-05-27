@@ -1,22 +1,54 @@
 import { Router } from 'express';
 import auth from '../middlewares/auth.middleware.js';
-import { Long } from 'mongodb';
+import { UsersManagerMongo } from '../Dao/usersManagerMongo.js';
 
 const router = new Router();
 
-router.get('/current', auth , (req, res) => {
+const userService = new UsersManagerMongo()
+
+router.get('/current', auth, (req, res) => {
     res.send('datos sensibles que solo puede ver el admin')
 })
 
-router.post('/login', (req, res) => {
+router.post('/register', async (req, res) => {
+    try {
+        const { first_name, last_name, age, email, password } = req.body;
+        if (!email || !password) return res.status(401).send({ status: 'error', error: 'Se deben completar todos los datos' })
+        const userExists = await userService.getUserBy({ email })
+        console.log(userExists);
+        if (userExists) return res.status(401).send({ status: 'error', error: 'El usuario ya existe' })
+        const newUser = {
+            first_name,
+            last_name,
+            age,
+            email,
+            password,
+        };
+        const result = await userService.createUser(newUser);
+        console.log(result);
+
+        res.redirect('/login')
+    } catch (err) {
+        console.log(err);
+    }
+})
+
+router.post('/login', async (req, res) => {
+    try {
     const { email, password } = req.body
-    if (email != 'f@gmail.com' || password != 'Soycra') return res.send('login failed')
+    if (!email || !password) return res.status(401).send({ status: 'error', error: 'Se deben completar todos los datos' })
+    const userFound = await userService.getUserBy({ email, password })
+    if (!userFound) return res.status(401).send({ status: 'error', error: 'Usuario no encontrado o contraseña incorrecta' })
+    // if (email != 'j@moreira.com' || password != 'Soycra') return res.send('login failed')
     req.session.user = {
         email,
-        admin: true
-    }   
-    console.log(req.session.user);
-    res.send('login success')
+        first_name: userFound.first_name,
+        admin: userFound.role === 'admin'
+    }
+    res.redirect('/products')
+    } catch (err) {
+        console.log(err);
+        }
 })
 
 router.get('/', (req, res) => {
@@ -31,7 +63,7 @@ router.get('/', (req, res) => {
 
 router.get('/logout', (req, res) => {
     req.session.destroy(err => {
-        if (!err) return res.send('logout')
+        if (!err) return res.redirect('/login')
         else return res.send({ status: 'error', error: err })
     })
 })

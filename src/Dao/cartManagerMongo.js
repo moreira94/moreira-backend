@@ -30,18 +30,10 @@ export default class CartManagerMongo {
         return result;
     };
 
-    // getCartById = async (cid) => {
-    //     try {
-    //         let cartsById = await cartsModel.findById(cid)
-    //         return cartsById
-    //     } catch {
-    //         return console.log(`El cart con el id ${cid} no existe`)
-    //     }
-    // };
 
     getCartById = async (cid) => {
         try {
-            let cartsById = await cartsModel.findById(cid);
+            let cartsById = await cartsModel.findById(cid).populate('products.product');
             const products = cartsById.products.map((product) => {
                 return {
                     _id: product._id,
@@ -53,6 +45,15 @@ export default class CartManagerMongo {
             return console.log(`El cart con el id ${cid} no existe`);
         }
     };
+
+    // getCartById = async (cid) => {
+    //     try {
+    //       let cartById = await cartsModel.findById(cid).populate('products.product');
+    //       return cartById;
+    //     } catch {
+    //       return console.log(`El cart con el id ${cid} no existe`);
+    //     }
+    //   };
 
     resetCart = async (cid) => {
         let cartsById = await cartsModel.findOneAndUpdate(
@@ -107,14 +108,14 @@ export default class CartManagerMongo {
         if (!cart) {
             return console.log('El carrito no existe');
         }
-        const productInCart = cart.products.find(product => product._id.toString() === pid._id.toString());
+        const productInCart = cart.products.find(product => product._id.toString() === pid.toString());
         if (productInCart) {
             productInCart.quantity += 1;
             const result = await cart.save();
             return result;
         } else {
             const newProductInCart = {
-                pid,
+                _id: pid,
                 quantity: 1
             }
             cart.products.push(newProductInCart);

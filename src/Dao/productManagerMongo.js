@@ -9,8 +9,12 @@ export default class ProductManagerMongo {
 
   getProducts = async (limit = 10, numPage=1, sort ) => {
     try {
-      const products = await productModel.paginate({}, {limit: limit, page: numPage, sort: sort,  lean: true});
-      return products;
+      const options = {limit: limit, page: numPage, lean: true}
+      if (sort !== undefined) {
+        options.sort = {price: sort}
+      }
+      const products = await productModel.paginate({}, options)
+    return products;
     }
     catch (err) {
       const products = []

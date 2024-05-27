@@ -11,7 +11,7 @@ import connectDB from './config/index.js';
 import cookieParser from 'cookie-parser';
 import session from 'express-session'
 import FileStore from 'session-file-store'
-
+import MongoStore from 'connect-mongo';
 
 const app = express();
 const PORT = process.env.PORT || 8080
@@ -25,11 +25,32 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
+
+// const fileStorage = FileStore(session)
+// app.use(session({
+//     store: new fileStorage({
+//         path: './sessions',
+//         ttl: 100,
+//         retries: 0
+//     }),
+//     secret: 'secret',
+//     resave: true,
+//     saveUninitialized: true
+// }))
 app.use(session({
+    store: MongoStore.create({
+        mongoUrl: 'mongodb+srv://moreirajuliangustavo:superyo94@backend.flriqtn.mongodb.net/Ecommerce?retryWrites=true&w=majority&appName=Backend' , 
+        mongoOptions: {
+            // useNewUrlParser: true,
+            // useUnifiedTopology: true
+        },
+        ttl: 60 * 60 * 1000 * 24
+    }),
     secret: 'secret',
     resave: true,
     saveUninitialized: true
 }))
+
 
 connectDB()
 
@@ -43,7 +64,7 @@ io.on('connection', (socket) => {
 
     socket.on('addProduct', async (data) => {
         await productManager.addProduct(data);
-        const products = await productManager.getProducts(); 
+        const products = await productManager.getProducts();
         io.emit('update-products', products);
     });
 
