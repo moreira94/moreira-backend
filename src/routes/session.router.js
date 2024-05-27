@@ -37,15 +37,21 @@ router.post('/login', async (req, res) => {
     try {
     const { email, password } = req.body
     if (!email || !password) return res.status(401).send({ status: 'error', error: 'Se deben completar todos los datos' })
+    if (email === "adminCoder@coder.com" && password === "adminCod3er123") {
+        req.session.user = {
+            first_name: email,
+            admin: 'admin'
+        }
+        res.redirect('/products')
+    } else {
     const userFound = await userService.getUserBy({ email, password })
     if (!userFound) return res.status(401).send({ status: 'error', error: 'Usuario no encontrado o contraseña incorrecta' })
-    // if (email != 'j@moreira.com' || password != 'Soycra') return res.send('login failed')
     req.session.user = {
         email,
         first_name: userFound.first_name,
         admin: userFound.role === 'admin'
     }
-    res.redirect('/products')
+    res.redirect('/products')}
     } catch (err) {
         console.log(err);
         }

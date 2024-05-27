@@ -2,59 +2,56 @@
   <div class="container">
     <a class="logout" href="api/session/logout">Logout</a>
   </div>
-    <div>
-      <h4>Bienvenido {{user.first_name}}</h4>
-        <h1>LISTA DE PRODUCTOS:</h1>
-        <div class="product-container">
-            {{#each products}}
-            <div class="product">
-                <h3>{{this.title}}</h3>
-                <p>Descripción: {{this.description}}</p>
-                <p>Precio: ${{this.price}}</p>
-                <p>Stock: {{this.stock}}</p>
-                <p>Código del producto: {{this.code}}</p>
-                <p id="product-id">{{this._id}}</p>
-                <div class="addCart-button">
-                    <button class="add-to-cart"  id="add-to-cart">Agregar al carrito</button>
-                    </form>
-                </div>
-                <hr>
-            </div>
-            {{/each}}
-
-
-
+  <div>
+    <h4>Bienvenido {{user.first_name}}</h4>
+    <h4>Rol: {{#if user.admin}}admin{{else}}user{{/if}}</h4>
+    <h1>LISTA DE PRODUCTOS:</h1>
+    <div class="product-container">
+      {{#each products}}
+      <div class="product">
+        <h3>{{this.title}}</h3>
+        <p>Descripción: {{this.description}}</p>
+        <p>Precio: ${{this.price}}</p>
+        <p>Stock: {{this.stock}}</p>
+        <p>Código del producto: {{this.code}}</p>
+        <p id="product-id">{{this._id}}</p>
+        <div class="addCart-button">
+          <button class="add-to-cart" id="add-to-cart">Agregar al carrito</button>
+          </form>
         </div>
-        <div class="pagination">
-            {{#if hasPrevPage}}
-            <a href="/products?page={{prevPage}}{{#if limit}}&limit={{limit}}{{/if}}">Anterior</a>
-            {{/if}}
-            <label class="pagNumero">Pag: {{page}}</label>
+        <hr>
+      </div>
+      {{/each}}
 
-            {{#if hasNextPage}}
-            <a href="/products?page={{nextPage}}{{#if limit}}&limit={{limit}}{{/if}}">Siguiente</a>
-            {{/if}}
 
-        </div>
-        <div class="pagination">
-            <a href="/products?sort=asc">Ascendente   </a>
-            <a href="/products?sort=desc">   Descendente</a>
 
-        </div>
-        <h1>Total de productos: {{cantProducts}}</h1>
     </div>
+    <div class="pagination">
+      {{#if hasPrevPage}}
+      <a href="/products?page={{prevPage}}{{#if limit}}&limit={{limit}}{{/if}}">Anterior</a>
+      {{/if}}
+      <label class="pagNumero">Pag: {{page}}</label>
+
+      {{#if hasNextPage}}
+      <a href="/products?page={{nextPage}}{{#if limit}}&limit={{limit}}{{/if}}">Siguiente</a>
+      {{/if}}
+
+    </div>
+    <div class="pagination">
+      <a href="/products?sort=asc">Ascendente </a>
+      <a href="/products?sort=desc"> Descendente</a>
+
+    </div>
+    <h1>Total de productos: {{cantProducts}}</h1>
+  </div>
 
 </main>
 
 <script>
-   // const butonSubmit = document.querySelector("#add-to-cart")
-   // butonSubmit.addEventListener("click", function(event) {
-   //     event.preventDefault()
-   // })
- document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     const agregarProducto = document.querySelectorAll(".add-to-cart");
     agregarProducto.forEach(boton => {
-      boton.addEventListener("click", function(event) {
+      boton.addEventListener("click", function (event) {
         event.preventDefault();
         const pid = this.closest(".product").querySelector("#product-id").innerText;
         const cid = "664bb4faa5bc7c5f3e9173b2";
@@ -62,16 +59,16 @@
         fetch(url, {
           method: "POST",
         })
-      .then(response => {
-          if (response.ok) {
-            console.log("Producto agregado correctamente");
-          } else {
-            console.log("Error al agregar producto");
-          }
-        })
-      .catch(error => {
-          console.log("Error al realizar la petición", error);
-        });
+          .then(response => {
+            if (response.ok) {
+              console.log("Producto agregado correctamente");
+            } else {
+              console.log("Error al agregar producto");
+            }
+          })
+          .catch(error => {
+            console.log("Error al realizar la petición", error);
+          });
       });
     });
   });
