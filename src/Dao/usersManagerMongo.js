@@ -17,6 +17,10 @@ export class UsersManagerMongo {
   
     async getUserBy(filter) {
       return this.userModel.findOne(filter);
+    }
+
+    async updateUser(filter, update) {
+      return await this.userModel.findOneAndUpdate(filter, update, {new: true})
 
     }
   

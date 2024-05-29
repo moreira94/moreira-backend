@@ -33,6 +33,7 @@ router.get('/products', async (req, res) => {
         numPage,
         limit,
         user: req.session.user
+    
     } )
 })
 
@@ -70,6 +71,7 @@ router.get('/realtimeproducts', async (req, res) => {
     router.get('/register', (req, res) => {
         res.render('register')
     } )
+
 
     router.get('/users', auth, async (req, res) => {
         const {numPage, limit} = req.query

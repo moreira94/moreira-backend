@@ -1,0 +1,44 @@
+<main>
+    <h1>RESTAURAR CONTRASEÑA</h1>
+
+    <form id="restore-form">
+        <label for="">Email</label>
+        <input type="email" name="email">
+        <label for="">Password</label>
+        <input type="text" name="password" id="">
+        <button>Enviar</button>
+
+    </form>
+
+    <a class="register" href="/login">Volver al Login</a>
+
+</main>
+<script>
+    const form = document.getElementById('restore-form');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = form.email.value;
+        const password = form.password.value;
+
+        try {
+            const response = await fetch('/api/session/restaurar', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                window.location.href = '/login';
+            } else {
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    });
+</script>

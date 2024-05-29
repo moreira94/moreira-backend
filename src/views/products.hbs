@@ -4,7 +4,7 @@
   </div>
   <div>
     <h4>Bienvenido {{user.first_name}}</h4>
-    <h4>Rol: {{#if user.admin}}admin{{else}}user{{/if}}</h4>
+    <h4>Rol: {{user.role}}
     <h1>LISTA DE PRODUCTOS:</h1>
     <div class="product-container">
       {{#each products}}

@@ -2,7 +2,7 @@
         if(req.session?.user?.admin){
             return next()
         }
-        return res.status(401).send('Error de autorizacion')
+        return res.status(403).send('Error de autorizacion')
     }
 
     export default auth

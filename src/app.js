@@ -10,14 +10,16 @@ import ProductManagerMongo from './Dao/productManagerMongo.js';
 import connectDB from './config/index.js';
 import cookieParser from 'cookie-parser';
 import session from 'express-session'
-import FileStore from 'session-file-store'
+// import FileStore from 'session-file-store'
 import MongoStore from 'connect-mongo';
+import passport from 'passport';
+import { initPassport } from './config/passport.config.js';
 
 const app = express();
 const PORT = process.env.PORT || 8080
 
 const httpServer = app.listen(PORT, err => {
-    if (err) console.log(err);
+    if (err) console.log(err);  
     console.log('Server escuchando en puerto 8080');
 })
 
@@ -26,17 +28,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
 
-// const fileStorage = FileStore(session)
-// app.use(session({
-//     store: new fileStorage({
-//         path: './sessions',
-//         ttl: 100,
-//         retries: 0
-//     }),
-//     secret: 'secret',
-//     resave: true,
-//     saveUninitialized: true
-// }))
 app.use(session({
     store: MongoStore.create({
         mongoUrl: 'mongodb+srv://moreirajuliangustavo:superyo94@backend.flriqtn.mongodb.net/Ecommerce?retryWrites=true&w=majority&appName=Backend' , 
@@ -50,6 +41,9 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
+initPassport()
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 connectDB()
@@ -74,7 +68,13 @@ io.on('connection', (socket) => {
         io.emit('update-products', products);
     });
 });
-
+const hbs = handlebars.create({
+    helpers: {
+      ifEqual: function(a, b) {
+        return a === b;
+      }
+    }
+  });
 app.engine('hbs', handlebars.engine({
     extname: '.hbs'
 }));
