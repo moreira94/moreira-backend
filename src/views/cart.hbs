@@ -13,30 +13,43 @@
         <div class="form-input">
         <button id="vaciar-carrito">Vaciar</button>
         </div>
+
+            <a class="register" href="/products">Volver a la vista de productos</a>
+
     </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     const vaciarCarritoButton = document.querySelector("#vaciar-carrito");
-    vaciarCarritoButton.addEventListener("click", function(event) {
+    vaciarCarritoButton.addEventListener("click", function (event) {
       event.preventDefault();
       const cid = "664bb4faa5bc7c5f3e9173b2";
       const url = `/api/cart/${cid}`;
+
       fetch(url, {
         method: "DELETE",
       })
-     .then(response => {
-        if (response.ok) {
-          console.log("Carrito vaciado correctamente");
-          location.reload()
-        } else {
-          console.log("Error al vaciar el carrito");
-        }
-      })
-     .catch(error => {
-        console.log("Error al realizar la petición", error);
-      });
+       .then(response => {
+          if (response.ok) {
+            Swal.fire({
+              position: "top-end",
+              title: 'Carrito vaciado correctamente',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 2000
+            })
+           .then(() => {
+              location.reload();
+            });
+          } else {
+            console.log("Error al vaciar el carrito");
+          }
+        })
+       .catch(error => {
+          console.log("Error al realizar la petición", error);
+        });
     });
   });
-</script> 
+</script>

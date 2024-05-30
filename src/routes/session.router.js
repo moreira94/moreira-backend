@@ -3,6 +3,7 @@ import auth from '../middlewares/auth.middleware.js';
 import { UsersManagerMongo } from '../Dao/usersManagerMongo.js';
 import { createHash, isValidPassword } from '../utils/bcrypt.js';
 import passport from 'passport';
+import { generateToken } from '../utils/jsonwebtocken.js';
 
 
 const router = new Router();
@@ -36,6 +37,10 @@ router.get('/current', auth, (req, res) => {
 //         };
 //         const result = await userService.createUser(newUser);
 //         console.log(result);
+        // const token = generateToken({
+        //     id: result._id;
+        //     email
+        // })
 
 //         res.redirect('/login')
 //     } catch (err) {
@@ -62,12 +67,18 @@ router.get('/current', auth, (req, res) => {
 //                     first_name: userFound.first_name,
 //                     admin: userFound.role === 'admin'
 //                 }
+//                 const token = generateToken({
+//                     id: userFound._id,
+//                     email
+//                 })
 //             res.redirect('/products')
 //         }
 //     } catch (err) {
 //         console.log(err);
 //     }
 // })
+
+
 router.post('/register', passport.authenticate('register', { failureRedirect: '/api/session/failregister' }), async (req, res) => {
     res.send({ status: 'success', message: 'Usuario registrado' })
 })
