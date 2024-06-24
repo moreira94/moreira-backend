@@ -5,6 +5,7 @@ import { createHash, isValidPassword } from '../utils/bcrypt.js';
 import passport from 'passport';
 import { generateToken } from '../utils/jsonwebtocken.js';
 import { RouterClass } from './router.js';
+import { objectConfig } from '../config/index.js';
 
 
 //Justamente esto tendria que hacerlo con los de usuarios y no los de Session
@@ -69,7 +70,7 @@ router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body
         if (!email || !password) return res.status(401).send({ status: 'error', error: 'Se deben completar todos los datos' })
-        if (email === "adminCoder@coder.com" && password === "adminCod3er123") {
+        if (email === objectConfig.adminMail && password === objectConfig.adminPass) {
             req.session.user = {
                 first_name: email,
                 admin: 'admin'
