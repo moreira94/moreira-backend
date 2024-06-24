@@ -11,7 +11,7 @@ export default class CartManagerMongo {
 
     getCarts = async () => {
         try {
-            const carts = await cartsModel.find({}).lean();
+            const carts = await this.model.find({}).lean();
             return carts;
         }
         catch (err) {
@@ -25,7 +25,7 @@ export default class CartManagerMongo {
             products: []
         }
 
-        const result = await cartsModel.create(newCart)
+        const result = await this.model.create(newCart)
 
         return result;
     };
@@ -33,14 +33,15 @@ export default class CartManagerMongo {
 
     getCartById = async (cid) => {
         try {
-            let cartsById = await cartsModel.findById(cid).populate('products.product');
+            let cartsById = await this.model.findById(cid).populate('products.product', 'title description price').lean()
+            ;
             const products = cartsById.products.map((product) => {
                 return {
                     _id: product._id,
                     quantity: product.quantity, 
                 };
             });
-            return { products };
+            return  {products} ;
         } catch {
             return console.log(`El cart con el id ${cid} no existe`);
         }
@@ -48,7 +49,7 @@ export default class CartManagerMongo {
 
     // getCartById = async (cid) => {
     //     try {
-    //       let cartById = await cartsModel.findById(cid).populate('products.product');
+    //       let cartById = await this.model.findById(cid).populate('products.product');
     //       return cartById;
     //     } catch {
     //       return console.log(`El cart con el id ${cid} no existe`);
@@ -56,7 +57,7 @@ export default class CartManagerMongo {
     //   };
 
     resetCart = async (cid) => {
-        let cartsById = await cartsModel.findOneAndUpdate(
+        let cartsById = await this.model.findOneAndUpdate(
             { _id: cid },
             { $set: { products: [] } },
             { new: true }
@@ -65,13 +66,13 @@ export default class CartManagerMongo {
     }
 
     // updateCart = async(cid, pid) => {
-    //     const result = await cartsModel.findByIdAndUpdate(
+    //     const result = await this.model.findByIdAndUpdate(
     //         {_id: cid, 'products.product': pid},
     //         {$inc: {'products.$.quantity': 1}},
     //         {new: true, upsert: true}
     //     )
     //     if (result) return result;
-    //     const newProductInCart = await cartsModel.findOneAndUpdate(
+    //     const newProductInCart = await this.model.findOneAndUpdate(
     //         {_id: cid},
     //         {$push: {products: {product: pid, quantity: 1}}},
     //         {new: true}
@@ -82,7 +83,7 @@ export default class CartManagerMongo {
         const cantidad = parseInt(productCant.quantity);
         console.log(cantidad);
         console.log(pid);
-        const cart = await cartsModel.findById(cid);
+        const cart = await this.model.findById(cid);
         if (!cart) {
             return console.log('El carrito no existe');
         }
@@ -104,7 +105,7 @@ export default class CartManagerMongo {
     //   }
 
     addProductToCart = async (cid, pid) => {
-        const cart = await cartsModel.findById(cid);
+        const cart = await this.model.findById(cid);
         if (!cart) {
             return console.log('El carrito no existe');
         }
@@ -125,7 +126,7 @@ export default class CartManagerMongo {
     }
 
     deleteProductFromCart = async (cid, pid) => {
-        const cart = await cartsModel.findById(cid);
+        const cart = await this.model.findById(cid);
         if (!cart) {
             return console.log('El carrito no existe');
         }

@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
+import { objectConfig } from '../config/index.js';
 
-const PRIVATE_KEY = 'CoderKeySecretToken'
+export const PRIVATE_KEY = objectConfig.JWTKEY
 
 export const generateToken = user => jwt.sign({ user }, PRIVATE_KEY, { expiresIn: '24h' })
 

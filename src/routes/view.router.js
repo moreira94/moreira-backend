@@ -32,15 +32,16 @@ router.get('/products', async (req, res) => {
         cantProducts,
         numPage,
         limit,
-        user: req.session.user
-    
+        user: req.session.user    
     } )
+    console.log(req.session.user);
 })
 
 router.get('/carts/:cid', async (req, res) => {
     try {
     const { cid } = req.params;
     const cart = await cartManager.getCartById(cid);
+    console.log(cart);
     const products = cart.products;
     res.render('cart', {products: products})
 }

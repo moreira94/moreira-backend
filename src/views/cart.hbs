@@ -1,22 +1,25 @@
 <main>
-    <div>
-        <div class="product-container">
-            {{#each products}}
-            <div class="product">
-                <h3>{{this._id}}</h3>
-                <p>Cantidad: {{this.quantity}}</p>
-                <hr>
-            </div>
-            {{/each}}
+  <div>
+    <div class="product-container">
+      {{#each products}}
+      <div class="product">
+        <h3>{{this._id}}</h3>
+        <h3>{{this.title}}</h3>
+        <p>Cantidad: {{this.quantity}}</p>
+        {{!-- <p>Precio: {{this.product.price}}</p> --}}
 
-        </div>
-        <div class="form-input">
-        <button id="vaciar-carrito">Vaciar</button>
-        </div>
-
-            <a class="register" href="/products">Volver a la vista de productos</a>
+        <hr>
+      </div>
+      {{/each}}
 
     </div>
+    <div class="form-input">
+      <button id="vaciar-carrito">Vaciar</button>
+    </div>
+
+    <a class="register" href="/products">Volver a la vista de productos</a>
+
+  </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js"></script>
@@ -31,7 +34,7 @@
       fetch(url, {
         method: "DELETE",
       })
-       .then(response => {
+        .then(response => {
           if (response.ok) {
             Swal.fire({
               position: "top-end",
@@ -40,14 +43,14 @@
               showConfirmButton: false,
               timer: 2000
             })
-           .then(() => {
-              location.reload();
-            });
+              .then(() => {
+                location.reload();
+              });
           } else {
             console.log("Error al vaciar el carrito");
           }
         })
-       .catch(error => {
+        .catch(error => {
           console.log("Error al realizar la petición", error);
         });
     });

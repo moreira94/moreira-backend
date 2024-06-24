@@ -7,20 +7,25 @@ import { __dirname, uploader } from './utils.js';
 import handlebars from 'express-handlebars';
 import { Server } from 'socket.io';
 import ProductManagerMongo from './Dao/productManagerMongo.js';
-import connectDB from './config/index.js';
+import {objectConfig, connectDB} from './config/index.js';
 import cookieParser from 'cookie-parser';
 import session from 'express-session'
 // import FileStore from 'session-file-store'
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
-import { initPassport } from './config/passport.config.js';
+import dotenv from 'dotenv' 
+// import { initPassport, initializePassport } from './config/passport.config.js';
+import { initializePassport } from './config/passport.config.js';
+import SessionRouter from './routes/session.router.js';
 
+// const sessionRouterClass = new SessionRouter()
+dotenv.config()
 const app = express();
 const PORT = process.env.PORT || 8080
 
 const httpServer = app.listen(PORT, err => {
     if (err) console.log(err);  
-    console.log('Server escuchando en puerto 8080');
+    console.log('Server escuchando en puerto ' + PORT);
 })
 
 app.use(express.json());
@@ -41,10 +46,9 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
-initPassport()
+// initPassport()
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 connectDB()
 
